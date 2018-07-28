@@ -27,7 +27,7 @@ class NavMenu  extends React.Component {
     render() { 
         return ( 
           <Navbar color="dark" dark expand="md">
-              <NavbarBrand href="/">reactstrap</NavbarBrand>
+              <NavbarBrand href="/">ALWESAL</NavbarBrand>
               <NavbarToggler onClick={this.toggle} />
 
               <Collapse isOpen={this.state.isOpen} onEntered={()=>{console.log('i am opened')}} navbar> 
