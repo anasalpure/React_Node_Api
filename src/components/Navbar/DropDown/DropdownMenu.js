@@ -1,29 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Popper } from 'react-popper';
-import { mapToCssModules , getClassNames } from '../utils';
+import {  getClassNames} from '../../utils';
 
 const propTypes = {
-  tag: PropTypes.string,
-  children: PropTypes.node.isRequired,
   right: PropTypes.bool,
   flip: PropTypes.bool,
   modifiers: PropTypes.object,
   className: PropTypes.string,
-  cssModule: PropTypes.object,
   persist: PropTypes.bool,
+  isOpen :PropTypes.bool,
 };
 
 const defaultProps = {
-  tag: 'div',
   flip: true,
+  isOpen:false,
 };
 
-const contextTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  direction: PropTypes.oneOf(['up', 'down', 'left', 'right']).isRequired,
-  inNavbar: PropTypes.bool.isRequired,
-};
+
 
 const noFlipModifier = { flip: { enabled: false } };
 
@@ -35,25 +28,25 @@ const directionPositionMap = {
 };
 
 const DropdownMenu = (props, context) => {
-  const { className, cssModule, right, tag, flip, modifiers, persist, ...attrs } = props;
-  const classes = mapToCssModules(classNames(
+  const { className , right , flip, modifiers, persist ,isOpen, ...attrs } = props;
+  const classes = getClassNames(
     className,
     'dropdown-menu',
     {
       'dropdown-menu-right': right,
-      show: context.isOpen,
+      show: isOpen,
     }
-  ), cssModule);
+  );
 
-  let Tag = tag;
+  const ariaLabel = props['aria-label'] || 'Dropdown menu';
 
-  if (persist || (context.isOpen && !context.inNavbar)) {
-    Tag = Popper;
+
+
+  if (persist || isOpen ) {
 
     const position1 = directionPositionMap[context.direction] || 'bottom';
     const position2 = right ? 'end' : 'start';
     attrs.placement = `${position1}-${position2}`;
-    attrs.component = tag;
     attrs.modifiers = !flip ? {
       ...modifiers,
       ...noFlipModifier,
@@ -61,19 +54,44 @@ const DropdownMenu = (props, context) => {
   }
 
   return (
-    <Tag
+    <div
       tabIndex="-1"
       role="menu"
       {...attrs}
-      aria-hidden={!context.isOpen}
+      aria-hidden={!isOpen}
       className={classes}
-      x-placement={attrs.placement}
-    />
+      x-placement={attrs.placement} 
+      aria-label={ariaLabel}
+    >
+    
+      <a className="dropdown-item" href="#">Action</a>
+      <a className="dropdown-item" href="#">Another action</a>
+      <div className="dropdown-divider"></div>
+      <a className="dropdown-item" href="#">Something else here</a>
+      
+    </div>
   );
 };
 
 DropdownMenu.propTypes = propTypes;
 DropdownMenu.defaultProps = defaultProps;
-DropdownMenu.contextTypes = contextTypes;
+
 
 export default DropdownMenu;
+
+
+/*
+ <li className="nav-item dropdown">
+    <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      Dropdown
+    </a>
+    **************************************************************************************
+    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+      <a className="dropdown-item" href="#">Action</a>
+      <a className="dropdown-item" href="#">Another action</a>
+      <div className="dropdown-divider"></div>
+      <a className="dropdown-item" href="#">Something else here</a>
+    </div>
+    ***************************************************************************************
+</li>
+ */

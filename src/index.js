@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import registerServiceWorker from './registerServiceWorker'
 //import 'bootstrap/dist/css/bootstrap.min.css';
+import './normalize.css';
 import Services  from './components/Service/Services.jsx';
 import NavMenu  from './components/Navbar/NavMenu';
 
